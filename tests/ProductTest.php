@@ -13,14 +13,6 @@ class ProductTest extends TestCase
         $this->product = new Product();
     }
 
-    public function testGetName() {
-
-
-    }
-
-    public function testSetName() {
-        $this->assertEquals(0, $this->cart->reset());
-    }
 
 
 }

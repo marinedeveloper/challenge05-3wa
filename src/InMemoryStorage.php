@@ -1,33 +1,45 @@
 <?php
 
-namespace App;
+namespace Cart;
 
-class InMemoryStorage
+use Cart\Storable;
+
+class InMemoryStorage implements Storable
 {
 
-    public function __construct() {
-    }
+    private array $storage = [];
 
-    private static $values = [];
-
-    /**
-     * @param array $values
-     */
-    public static function setValues(array $values): void
+    public function setValue(string $name, float $price): void
     {
-        self::$values = $values;
+        if(array_key_exists($name, $this->storage) === true){
+            $this->storage[$name] += $price;
+
+            return ;
+        }
+
+        $this->storage[$name] = $price;
     }
 
-    public static function delete($key) {
-        unset(self::$values[$key]);
+    public function restore(string $name):void{
+        if(!array_key_exists($name, $this->storage)) {
+            throw new \Exception("Product $name not found");
+        }
+
+        unset($this->storage[$name]);
     }
 
-    public static function reset() {
-        self::$values = [];
+    public function reset():void{
+        $this->storage = [];
     }
 
-    public static function total() {
-        return count(self::$values);
+    public function total(): float
+    {
+        return $this->storage->total();
+    }
+
+    public function getStorage(): array
+    {
+        return $this->storage;
     }
 
 }

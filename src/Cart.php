@@ -1,31 +1,33 @@
 <?php
 
-namespace App;
+namespace Cart;
 
-use Exception;
-
-class Cart {
-    private array $cart = [];
-
-    public function buy(Product $product, $quantity) {
-        $this->cart[] = ['product' => $product, 'quantity' => $quantity];
-    }
-
-    public function reset() {
-        $this->cart = [];
-    }
-
-    public function restore($index)
+class Cart
+{
+    // .2 <=> 0.2
+    public function __construct(private Storable $storage, private float $tva = .2)
     {
-
     }
 
-    public function total() {
-        $total = 0;
-        foreach ($this->cart as $item) {
-            $total += $item['product']->getPrice() * $item['quantity'];
-        }
+    public function buy(Productable $p, int $quantity): void
+    {
+        $total = abs($quantity * $p->getPrice() * ($this->tva + 1));
 
-        return $total;
+        $this->storage->setValue($p->getName(), $total);
+    }
+
+    public function reset(): void
+    {
+        $this->storage->reset();
+    }
+
+    public function restore(Productable $p): void
+    {
+        $this->storage->restore($p->getName());
+    }
+
+    public function total(): float
+    {
+        return round($this->storage->total(), $_ENV['APP_PRECISION'] ?? 3);
     }
 }

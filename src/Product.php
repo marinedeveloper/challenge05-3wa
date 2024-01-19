@@ -1,40 +1,32 @@
 <?php
 
-namespace App;
+namespace Cart;
 
-class Product {
+use Cart\Productable;
 
-    private string $name;
-    private float $price;
+class Product implements Productable {
 
-    public function __construct() {
-    }
-
-    /**
-     * @param mixed $price
-     * @return Product
-     */
-    public function setPrice($price)
+    public function __construct(private string $name, private float $price)
     {
-        $this->price = $price;
-        return $this;
     }
 
-    /**
-     * @param mixed $name
-     * @return Product
-     */
-    public function setName($name)
+    public function getName(): string
     {
-        $this->name = $name;
-        return $this;
-    }
-
-    public function getName() {
         return $this->name;
     }
 
-    public function getPrice() {
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setPrice(float $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function getPrice(): float
+    {
         return $this->price;
     }
 }

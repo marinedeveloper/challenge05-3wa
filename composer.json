@@ -2,8 +2,8 @@
     "name": "3wa/message",
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "App\\Tests\\": "tests/"
+            "Cart\\" : "src/",
+            "Cart\\Tests\\" : "tests/"
         },
         "classmap": [
             "src/"
