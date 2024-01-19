@@ -1,4 +1,4 @@
-name: Test Cart
+name: Test CartManager
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - synchronize
 
 jobs:
-  calculator:
+  cartmanager:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout du code
