@@ -3,12 +3,31 @@
 namespace App;
 
 class Product {
-    public $name;
-    public $price;
 
-    public function __construct($name, $price) {
-        $this->name = $name;
+    private string $name;
+    private float $price;
+
+    public function __construct() {
+    }
+
+    /**
+     * @param mixed $price
+     * @return Product
+     */
+    public function setPrice($price)
+    {
         $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * @param mixed $name
+     * @return Product
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
 
     public function getName() {

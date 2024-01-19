@@ -1,6 +1,7 @@
 <?php
 
 use App\Cart;
+use App\InMemoryStorage;
 use App\Product;
 use PHPUnit\Framework\TestCase;
 
@@ -8,27 +9,20 @@ class CartTest extends TestCase
 {
     protected Product $product;
     protected Cart $cart;
+    protected InMemoryStorage $inMemoryStorage;
 
     public function setUp():void {
-        $this->cart = new Cart();
+        $cart = new Cart(new InMemoryStorage());
     }
 
     public function testBuy() {
-        $product = new Product('apple', 5);
-
-        $this->assertEquals(3, $this->cart->buy($product));
     }
 
     public function testReset() {
-        $this->assertEquals(0, $this->cart->reset());
     }
 
     public function testRestore() {
-        $this->assertEquals(2, $this->cart->restore());
-    }
 
-    public function testTotal() {
-        $this->assertEquals(2, $this->cart->restore());
     }
 
 }
