@@ -1,7 +1,7 @@
 <?php
 
-use App\Cart;
-use App\Product;
+
+use Cart\Product;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
@@ -12,7 +12,6 @@ class ProductTest extends TestCase
     public function setUp():void {
         $this->product = new Product();
     }
-
 
 
 }
