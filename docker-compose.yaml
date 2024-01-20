@@ -2,10 +2,15 @@ services:
   app:
     image: php:8.2-cli
     ports:
-      - 127.0.0.1:8080:80
+      - 127.0.0.1:8000:81
     working_dir: /app
     volumes:
       - .:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: cart
 
   tests:
     image: php:8.2-cli
@@ -14,5 +19,15 @@ services:
     working_dir: /app/
     entrypoint: vendor/bin/phpunit
 
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - cart-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: cart
+    ports:
+      - 127.0.0.1:3000:80
+
 volumes:
-  cartmanager-mysql-data:
+  cart-mysql-data:

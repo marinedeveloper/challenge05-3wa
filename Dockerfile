@@ -8,5 +8,6 @@ RUN apt-get install libzip-dev -y && docker-php-ext-install zip
 # Apache
 RUN a2enmod rewrite
 RUN service apache2 restart
+RUN ["php", "./app.php"]
 
 EXPOSE 80

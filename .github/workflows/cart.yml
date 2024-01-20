@@ -1,4 +1,4 @@
-name: Test CartManager
+name: Run Tests
 
 on:
   push:
@@ -27,5 +27,8 @@ jobs:
       - name: "Install dependencies"
         run: composer install --ansi --no-interaction --no-progress
 
-      - name: Run Test Cart
+      - name: Run Tests
         run: vendor/bin/phpunit
+
+      - name: Build Docker Image
+        run:

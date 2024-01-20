@@ -2,24 +2,56 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use App\Product;
-use Cart\{ Cart };
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+$servername = "localhost";
+$username = "root";
+$password = "password";
+$dbname = "cart_database";
 
-// $cart = new Cart(new StorageArray);
-$cart = new Cart(new StorageSession);
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$products = [
-    'apple' => new Product('apple', 10.5),
-    'raspberry' => new Product('raspberry', 13.),
-    'orange' => new Product('orange', 7.5),
-];
+    // Ajout de quelques produits de test
+    $products = [
+        ['apple', 10.5],
+        ['raspberry', 13.0],
+        ['orange', 7.5],
+    ];
 
-// extrait chaque clé en créant la variable clé ayant la valeur de cette clé.
-extract($products);
+    foreach ($products as $product) {
+        $name = $product[0];
+        $price = $product[1];
 
-$cart->buy($apple, 3);
+        $stmt = $conn->prepare("INSERT INTO products (name, price) VALUES (:name, :price)");
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':price', $price);
+        $stmt->execute();
+    }
 
-var_dump($cart->total());
+    // Ajout de quelques paniers et produits dans les paniers
+    $stmt = $conn->prepare("INSERT INTO carts DEFAULT VALUES");
+    $stmt->execute();
+
+    $cartId = $conn->lastInsertId(); // Récupère l'ID du panier créé
+
+    $cartProducts = [
+        ['cart_id' => $cartId, 'product_id' => 1, 'quantity' => 3],
+        ['cart_id' => $cartId, 'product_id' => 2, 'quantity' => 2],
+    ];
+
+    foreach ($cartProducts as $cartProduct) {
+        $stmt = $conn->prepare("INSERT INTO cart_products (cart_id, product_id, quantity) VALUES (:cart_id, :product_id, :quantity)");
+        $stmt->bindParam(':cart_id', $cartProduct['cart_id']);
+        $stmt->bindParam(':product_id', $cartProduct['product_id']);
+        $stmt->bindParam(':quantity', $cartProduct['quantity']);
+        $stmt->execute();
+    }
+
+    echo "Données insérées avec succès.";
+
+} catch (PDOException $e) {
+    echo "Erreur : " . $e->getMessage();
+}
+
+$conn = null;
